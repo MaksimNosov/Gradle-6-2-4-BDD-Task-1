@@ -1,11 +1,9 @@
 package ru.netology.data;
 
-import com.github.javafaker.Faker;
 import lombok.Value;
 
-import java.security.SecureRandom;
 import java.util.Arrays;
-import java.util.Random;
+import java.util.List;
 
 public class DataHelper {
 
@@ -22,18 +20,6 @@ public class DataHelper {
         return new AuthInfo("vasya", "qwerty123");
     }
 
-    public static AuthInfo getInvalidLoginAndValidPasswordAuthInfo() {
-        return new AuthInfo("petya", "qwerty123");
-    }
-
-    public static AuthInfo getValidLoginAndInvalidPasswordAuthInfo() {
-        return new AuthInfo("vasya", "qwerty123");
-    }
-
-    public static AuthInfo getInvalidAuthInfo() {
-        return new AuthInfo("invalidUser", "456zxcvb");
-    }
-
     @Value
     public static class VerificationCode {
         public String code;
@@ -43,32 +29,42 @@ public class DataHelper {
         return new VerificationCode("12345");
     }
 
-    public static VerificationCode getInvalidVerificationCodeFor(AuthInfo authInfo) {
-        return new VerificationCode("77777");
-    }
-
     @Value
     public static class CardNumber {
-        private String CardNumber1;
-        private String CardNumber2;
+        private String CardNumber1 = "5559 0000 0000 0001";
+        private String CardNumber2 = "5559 0000 0000 0002";
     }
-    public static String getRandomCardNumber() {
-        var random = new SecureRandom();
-        var list = Arrays.asList("5559 0000 0000 0001", "5559 0000 0000 0002");
-        var cardNumber = list.get(random.nextInt(list.size()));
-        return cardNumber;
+
+    public static String getNumberCard1() {
+
+        CardNumber number = new CardNumber();
+        String numberCard1 = number.CardNumber1;
+        return numberCard1;
+    }
+
+    public static String getNumberCard2() {
+
+        CardNumber number = new CardNumber();
+        String numberCard2 = number.CardNumber2;
+        return numberCard2;
     }
 
     @Value
-    public static class SumforTrnsfer {
-        private String Sum;
+    public static class CardsIdList {
+        List cardIdList = Arrays.asList("92df3f1c-a033-48e6-8390-206f6b1f56c0", "0f3f5c2a-249e-4c3d-8287-09f7a039391d");
     }
 
-    public static String getSumForTransfer() {
-        Faker faker = new Faker();
-        var sumForTransfer = faker.number().toString();
-        return sumForTransfer;
+    public static String getIdCard1() {
+        String idCard1;
+        CardsIdList numbersList = new CardsIdList();
+        idCard1 = numbersList.cardIdList.get(0).toString();
+        return idCard1;
     }
 
-
+    public static String getIdCard2() {
+        String idCard2;
+        CardsIdList numbersList = new CardsIdList();
+        idCard2 = numbersList.cardIdList.get(1).toString();
+        return idCard2;
+    }
 }

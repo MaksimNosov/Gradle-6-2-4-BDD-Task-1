@@ -1,13 +1,11 @@
 package ru.netology.pages;
 
-import com.codeborne.selenide.CollectionCondition;
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
+import ru.netology.data.DataHelper;
 
 import static com.codeborne.selenide.Condition.*;
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.$$;
+import static com.codeborne.selenide.Selenide.*;
 
 public class DashboardPage {
 
@@ -17,18 +15,13 @@ public class DashboardPage {
         heading.shouldBe(visible);
     }
 
-    private ElementsCollection cards = $$(".list__item");
+    private ElementsCollection cards = $$(".list__item  div");
     private final String balanceStart = "баланс: ";
     private final String balanceFinish = " р.";
 
     public int getCardBalance(String id) {
-//        var text = cards.filterBy(text(id)).toString();
-//        String text ;
-//        for (SelenideElement card : cards) {
-             var text = cards.find(Condition.cssClass("[data-test-id='" + id + "']")).getText();
-//        var text = cards.findBy(cssClass(id)).getText();
 
-
+        var text = cards.findBy(attribute("data-test-id", id)).getText(); //
         return extractBalance(text);
     }
 
@@ -42,15 +35,22 @@ public class DashboardPage {
     private SelenideElement actionDepositButton = $("[data-test-id='action-deposit']");
     private SelenideElement ammount = $("[data-test-id='amount'] input");
     private SelenideElement from = $("[data-test-id='from'] input");
-    private SelenideElement to = $("[data-test-id='to'] input");
-    private SelenideElement actionTransferButton = $("[data-test-id='to']");
+    private SelenideElement actionTransferButton = $("[data-test-id='action-transfer']");
 
-    public DashboardPage actionDeposit(String sumAction, String idCardFrom) {
-        actionDepositButton.click();
-        ammount.setValue(sumAction);
-        from.setValue(idCardFrom);
-//        to.setValue(idCardForUp);
+    public DashboardPage transferFromCard1ToCard2(Integer sumTransfer) {
+        cards.findBy(attribute("data-test-id", DataHelper.getIdCard2())).find("[data-test-id='action-deposit']").click();
+        ammount.setValue(sumTransfer.toString());
+        from.setValue(DataHelper.getNumberCard1());
         actionTransferButton.click();
         return new DashboardPage();
     }
+
+    public DashboardPage transferFromCard2ToCard1(Integer sumTransfer) {
+        cards.findBy(attribute("data-test-id", DataHelper.getIdCard1())).find("[data-test-id='action-deposit']").click();
+        ammount.setValue(sumTransfer.toString());
+        from.setValue(DataHelper.getNumberCard2());
+        actionTransferButton.click();
+        return new DashboardPage();
+    }
+
 }
