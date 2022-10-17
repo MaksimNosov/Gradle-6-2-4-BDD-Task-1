@@ -17,7 +17,18 @@ public class MoneyTransferTest {
                 .validLogin(authInfo)
                 .validVerify(DataHelper.getValidVerificationCodeFor(authInfo));
     }
-
+    @Test
+    void checkBalanceAfterTransfer() {
+        DashboardPage dashboardPage = new DashboardPage();
+        var balanceCard1Before = dashboardPage.getCardBalance(DataHelper.getIdCard1());
+        var balanceCard2Before = dashboardPage.getCardBalance(DataHelper.getIdCard2());
+        var transferSum = 2_000;
+        dashboardPage.transferFromCard2ToCard1((transferSum));
+        var balanceCard1After = dashboardPage.getCardBalance(DataHelper.getIdCard1());
+        var balanceCard2After = dashboardPage.getCardBalance(DataHelper.getIdCard2());
+        assert balanceCard1After == (balanceCard1Before + transferSum);
+        assert balanceCard2After == (balanceCard2Before - transferSum);
+    }
     @Test
     void transferCannotMoreThanBalance() {
         DashboardPage dashboardPage = new DashboardPage();
@@ -34,18 +45,5 @@ public class MoneyTransferTest {
         dashboardPage.transferFromCard2ToCard1((balanceCard2Before * 2));
         var balanceCard2After = dashboardPage.getCardBalance(DataHelper.getIdCard2());
         assert balanceCard2After >= 0;
-    }
-
-    @Test
-    void checkBalanceAfterTransfer() {
-        DashboardPage dashboardPage = new DashboardPage();
-        var balanceCard1Before = dashboardPage.getCardBalance(DataHelper.getIdCard1());
-        var balanceCard2Before = dashboardPage.getCardBalance(DataHelper.getIdCard2());
-        var transferSum = 2_000;
-        dashboardPage.transferFromCard2ToCard1((transferSum));
-        var balanceCard1After = dashboardPage.getCardBalance(DataHelper.getIdCard1());
-        var balanceCard2After = dashboardPage.getCardBalance(DataHelper.getIdCard2());
-        assert balanceCard1After == (balanceCard1Before + transferSum);
-        assert balanceCard2After == (balanceCard2Before - transferSum);
     }
 }
