@@ -24,7 +24,7 @@ public class MoneyTransferTest {
         var balanceCard1Before = dashboardPage.getCardBalance(DataHelper.getIdCard1());
         dashboardPage.transferFromCard1ToCard2((balanceCard1Before * 2));
         var balanceCard1After = dashboardPage.getCardBalance(DataHelper.getIdCard1());
-        assert balanceCard1After <= 0;
+        assert balanceCard1After >= 0;
     }
 
     @Test
@@ -33,7 +33,7 @@ public class MoneyTransferTest {
         var balanceCard2Before = dashboardPage.getCardBalance(DataHelper.getIdCard2());
         dashboardPage.transferFromCard2ToCard1((balanceCard2Before * 2));
         var balanceCard2After = dashboardPage.getCardBalance(DataHelper.getIdCard2());
-        assert balanceCard2After <= 0;
+        assert balanceCard2After >= 0;
     }
 
     @Test
