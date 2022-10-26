@@ -19,9 +19,9 @@ public class DashboardPage {
     private final String balanceStart = "баланс: ";
     private final String balanceFinish = " р.";
 
-    public int getCardBalance(String id) {
 
-        var text = cards.findBy(attribute("data-test-id", id)).getText(); //
+    public int getCardBalance(DataHelper.CardInfo cardInfo) {
+        var text = cards.findBy(text(cardInfo.getCardNumber().substring(15, 19))).getText();
         return extractBalance(text);
     }
 
@@ -32,25 +32,8 @@ public class DashboardPage {
         return Integer.parseInt(value);
     }
 
-    private SelenideElement actionDepositButton = $("[data-test-id='action-deposit']");
-    private SelenideElement ammount = $("[data-test-id='amount'] input");
-    private SelenideElement from = $("[data-test-id='from'] input");
-    private SelenideElement actionTransferButton = $("[data-test-id='action-transfer']");
-
-    public DashboardPage transferFromCard1ToCard2(Integer sumTransfer) {
-        cards.findBy(attribute("data-test-id", DataHelper.getIdCard2())).find("[data-test-id='action-deposit']").click();
-        ammount.setValue(sumTransfer.toString());
-        from.setValue(DataHelper.getNumberCard1());
-        actionTransferButton.click();
-        return new DashboardPage();
+    public TransferPage selectCardToTransfer(DataHelper.CardInfo cardInfo) {
+        cards.findBy(attribute("data-test-id", cardInfo.getTestId())).$("button").click();
+        return new TransferPage();
     }
-
-    public DashboardPage transferFromCard2ToCard1(Integer sumTransfer) {
-        cards.findBy(attribute("data-test-id", DataHelper.getIdCard1())).find("[data-test-id='action-deposit']").click();
-        ammount.setValue(sumTransfer.toString());
-        from.setValue(DataHelper.getNumberCard2());
-        actionTransferButton.click();
-        return new DashboardPage();
-    }
-
 }
